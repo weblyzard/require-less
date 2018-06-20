@@ -2,7 +2,7 @@ define(function(require) {
   var less = require('less');
 
   var lessAPI = {
-    pluginBuilder: './cless-builder'
+    pluginBuilder: './no-inject-builder'
   };
 
   if (typeof window === 'undefined') {
