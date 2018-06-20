@@ -71,7 +71,7 @@ define(['require', './normalize'], function(req, normalize) {
   }
 
   var config;
-  var isComponent;
+  var inject;
   var siteRoot;
 
   var less = require.nodeRequire('less');
@@ -91,7 +91,6 @@ define(['require', './normalize'], function(req, normalize) {
   lessAPI.load = function(name, req, load, _config) {
     //store config
     config = config || _config;
-    isComponent = config.less.component;
 
     if (!siteRoot) {
       siteRoot = path.resolve(
@@ -114,6 +113,8 @@ define(['require', './normalize'], function(req, normalize) {
     cfg.filename = fileUrl;
     cfg.async = false;
     cfg.syncImport = true;
+
+    inject = cfg.inject;
 
     //make it compatible with v1 and v2
     var generation = less.version[0];
@@ -168,12 +169,12 @@ define(['require', './normalize'], function(req, normalize) {
       global._requirejsCssData.usedBy.less = true;
     }
 
-    var moduleContent = isComponent ? "return '" + escape(compress(css)) + "'" : '';
+    var moduleContent = inject ? '' : "return '" + escape(compress(css)) + "'";
     write.asModule(pluginName + '!' + moduleName, 'define(function(){' + moduleContent + '});');
   };
 
   lessAPI.onLayerEnd = function(write, data) {
-    if (isComponent === true) return;
+    if (inject === false) return;
 
     //calculate layer css
     var css = layerBuffer.join('');
