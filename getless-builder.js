@@ -11,7 +11,7 @@ define(function(require) {
     if (!config) config = {};
     if (!config.less) config.less = {};
     var inject = config.less.inject;
-    if (!inject) config.less.inject = false;
+    if (inject) config.less.inject = false;
     less.load.call(this, lessId, req, load, config);
     if (config.less.inject !== inject) config.less.inject = inject;
   };
